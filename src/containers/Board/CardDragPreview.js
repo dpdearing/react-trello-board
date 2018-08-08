@@ -16,7 +16,7 @@ const CardDragPreview = (props) => {
   styles.height = `${props.card.clientHeight || 243}px`;
 
   return (
-    <div style={styles}>
+    <div id="dragging" style={styles}>
       <Card item={props.card.item} />
     </div>
   );

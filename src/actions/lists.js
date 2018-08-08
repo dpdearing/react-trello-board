@@ -1,4 +1,4 @@
-import faker from 'faker';
+import { getColor, getMulticolor, getArtifacts, getNonBasicLand } from '../mtg'
 
 export const GET_LISTS_START = 'GET_LISTS_START';
 export const GET_LISTS = 'GET_LISTS';
@@ -9,24 +9,37 @@ export const TOGGLE_DRAGGING = 'TOGGLE_DRAGGING';
 export function getLists(quantity) {
   return dispatch => {
     dispatch({ type: GET_LISTS_START, quantity });
+    //FIXME this Timeout function takes too long!
     setTimeout(() => {
+
+      //TODO toggle on/off rares
+      
+      var categories = [ 
+        { name: "Multicolor", cards: getMulticolor()}, 
+        { name: "White",      cards: getColor("White")},
+        { name: "Blue",       cards: getColor("Blue")},
+        { name: "Black",      cards: getColor("Black")},
+        { name: "Red",        cards: getColor("Red")},
+        { name: "Green",      cards: getColor("Green")},
+        { name: "Artifact",   cards: getArtifacts()},
+        { name: "Land",       cards: getNonBasicLand()}
+      ];
+
       const lists = [];
       let count = 0;
-      for (let i = 0; i < quantity; i++) {
+      for (let i = 0; i < categories.length; i++) {
         const cards = [];
-        const randomQuantity = Math.floor(Math.random() * (9 - 1 + 1)) + 1;
-        for (let ic = 0; ic < randomQuantity; ic++) {
+        for (let ic = 0; ic < categories[i].cards.length; ic++) {
           cards.push({
-            id: count,
-            firstName: faker.name.firstName(),
-            lastName: faker.name.lastName(),
-            title: faker.name.jobTitle()
+            id: categories[i].cards[ic].multiverseid,
+            name: categories[i].cards[ic].name,
+            type: categories[i].cards[ic].type
           });
           count = count + 1;
         }
         lists.push({
           id: i,
-          name: faker.commerce.productName(),
+          name: categories[i].name,
           cards
         });
       }
